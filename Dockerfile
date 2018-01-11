@@ -1,5 +1,5 @@
 FROM php:5.6-apache
-MAINTAINER Pierre Cheynier <pierre.cheynier@sfr.com>
+MAINTAINER Sean Kaminski <sean.kaminski@gmail.com>
 
 ENV PHPIPAM_SOURCE https://github.com/phpipam/phpipam/archive/
 ENV PHPIPAM_VERSION 1.3.1
@@ -7,7 +7,7 @@ ENV WEB_REPO /var/www/html
 
 # Install required deb packages
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get install -y php-pear php5-curl php5-mysql php5-json php5-gmp php5-mcrypt php5-ldap php5-gd php-net-socket libgmp-dev libmcrypt-dev libpng12-dev libfreetype6-dev libjpeg-dev libpng-dev libldap2-dev && \
+    apt-get install -y libgmp-dev libmcrypt-dev libpng12-dev libfreetype6-dev libjpeg-dev libpng-dev libldap2-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Configure apache and required PHP modules
@@ -43,5 +43,16 @@ RUN cp ${WEB_REPO}/config.dist.php ${WEB_REPO}/config.php && \
     sed -i -e "s/\['port'\] = 3306;/\['port'\] = 3306;\n\n\$password_file = getenv(\"MYSQL_ENV_MYSQL_ROOT_PASSWORD\");\nif(file_exists(\$password_file))\n\$db\['pass'\] = preg_replace(\"\/\\\\s+\/\", \"\", file_get_contents(\$password_file));/" \
     ${WEB_REPO}/config.php
 
-EXPOSE 80
+# OpenShift permission modifications
++RUN mkdir -p /var/run/apache2 && chmod 777 -R /var/run/apache2 &&\
++    mkdir -p /var/log/apache2 && chmod 777 -R /var/log/apache2 &&\
++    mkdir -p /var/lock/apache2 && chmod 777 -R /var/lock/apache2 &&\
++    mkdir -p /etc/apache2/sites-enabled && chmod 777 -R /etc/apache2/sites-enabled &&\
++    mkdir -p /var/www/html && chmod 777 -R /var/www/html && \
++    chmod 664 /etc/passwd
+
++USER 10001
++
++WORKDIR ${WEB_REPO}
+EXPOSE 8080
 
