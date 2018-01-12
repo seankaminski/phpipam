@@ -13,12 +13,12 @@ RUN apt-get update && apt-get -y upgrade && \
 
 
 # OpenShift permission modifications
-+RUN mkdir -p /var/run/apache2 && chmod 777 -R /var/run/apache2 &&\
-+    mkdir -p /var/log/apache2 && chmod 777 -R /var/log/apache2 &&\
-+    mkdir -p /var/lock/apache2 && chmod 777 -R /var/lock/apache2 &&\
-+    mkdir -p /etc/apache2/sites-enabled && chmod 777 -R /etc/apache2/sites-enabled &&\
-+    mkdir -p /var/www/html && chmod 777 -R /var/www/html && \
-+    chmod 664 /etc/passwd
+RUN mkdir -p /var/run/apache2 && chmod 777 -R /var/run/apache2 &&\
+    mkdir -p /var/log/apache2 && chmod 777 -R /var/log/apache2 &&\
+    mkdir -p /var/lock/apache2 && chmod 777 -R /var/lock/apache2 &&\
+    mkdir -p /etc/apache2/sites-enabled && chmod 777 -R /etc/apache2/sites-enabled &&\
+    mkdir -p /var/www/html && chmod 777 -R /var/www/html && \
+    chmod 664 /etc/passwd
 
 
 # Configure apache and required PHP modules
@@ -57,8 +57,8 @@ sed -i -e "s/\['host'\] = 'localhost'/\['host'\] = 'mysql'/" \
 
 #
 
-+USER 10001
-+
-+WORKDIR ${WEB_REPO}
+USER 10001
+
+WORKDIR ${WEB_REPO}
 EXPOSE 8080
 
