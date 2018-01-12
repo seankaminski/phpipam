@@ -4,7 +4,7 @@ MAINTAINER Sean Kaminski <sean.kaminski@gmail.com>
 ENV PHPIPAM_SOURCE https://github.com/phpipam/phpipam/archive/
 ENV PHPIPAM_VERSION 1.3.1
 ENV WEB_REPO /var/www/html
-+ENV PATH=${WEB_REPO}/bin:${PATH} HOME=${WEB_REPO}
+ENV PATH=${WEB_REPO}/bin:${PATH} HOME=${WEB_REPO}
 
 # Install required deb packages
 RUN apt-get update && apt-get -y upgrade && \
